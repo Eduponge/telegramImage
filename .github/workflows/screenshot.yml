@@ -1,0 +1,23 @@
+name: Screenshot Automation
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Executa a cada 15 minutos
+  workflow_dispatch:
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+          npm install puppeteer
+
+      - name: Executar script de screenshot
+        run: bash ./scripts/tirar_screenshot.sh "https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9"
