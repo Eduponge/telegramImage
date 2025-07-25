@@ -1,18 +1,19 @@
 #!/bin/bash
 
 LINK="https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9"
-DATA=$(date +%Y%m%d_%H%M%S)
-ARQUIVO="screenshot_${DATA}.png"
 TOKEN="${API_KEY_TELEGRAM}"
 CHAT_ID="${CHAT_ID}"
+DATA=$(date +%Y%m%d_%H%M%S)
+ARQUIVO="screenshot_${DATA}.png"
 
 echo "Iniciando captura de tela..."
 
 if [ -z "$TOKEN" ] || [ -z "$CHAT_ID" ]; then
-  echo "Erro: API_KEY_TELEGRAM (TOKEN) ou CHAT_ID não definidos."
+  echo "Erro: API_KEY_TELEGRAM (TOKEN) ou CHAT_ID não definidos como variáveis de ambiente."
   exit 1
 fi
 
+# Gera o screenshot com puppeteer
 node <<EOF
 const puppeteer = require('puppeteer');
 (async () => {
