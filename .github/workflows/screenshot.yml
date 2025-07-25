@@ -1,25 +1,25 @@
-name: Screenshot PowerBI e Envio Telegram
+name: Notificar no Telegram
 
 on:
-  schedule:
-    - cron: '*/15 * * * *'  # Executa a cada 15 minutos
-  workflow_dispatch:        # Permite execução manual
+  workflow_dispatch:
 
 jobs:
-  screenshot_and_telegram:
+  notify:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Clonar o repositório
+      - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar dependências do sistema
+      - name: Instalar Node.js e Chromium
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser curl
+          sudo apt-get install -y chromium-browser
 
-      - name: Instalar dependências Node.js
+      - name: Instalar dependências Node.js (caso necessário)
         run: npm install puppeteer
 
-      - name: Executar script de screenshot e envio para Telegram
+      - name: Executar script de screenshot e envio ao Telegram
         run: bash scripts/tirar_screenshot.sh
+        env:
+          API_KEY_TELEGRAM: ${{ secrets.API_KEY_TELEGRAM }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
