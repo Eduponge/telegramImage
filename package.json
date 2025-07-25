@@ -1,0 +1,24 @@
+{
+  "name": "telegram-image",
+  "version": "1.0.0",
+  "description": "Script to take PowerBI screenshots and send to Telegram",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"No build step required\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  },
+  "keywords": [
+    "telegram",
+    "powerbi",
+    "screenshot",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC"
+}
