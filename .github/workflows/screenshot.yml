@@ -1,25 +1,31 @@
-name: Notificar no Telegram
+#!/bin/bash
+LINK="https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9"
+DATA=$(date +%Y%m%d_%H%M%S)
+ARQUIVO="screenshot_${DATA}.png"
 
-on:
-  workflow_dispatch:
+# Usa variáveis de ambiente passadas pelo GitHub Actions
+TOKEN="${API_KEY_TELEGRAM}"
+CHAT_ID="${CHAT_ID}"
 
-jobs:
-  notify:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+if [ -z "$TOKEN" ] || [ -z "$CHAT_ID" ]; then
+  echo "Erro: API_KEY_TELEGRAM (TOKEN) ou CHAT_ID não definidos como variáveis de ambiente."
+  exit 1
+fi
 
-      - name: Instalar Node.js e Chromium
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser
+# Gera o screenshot com puppeteer
+node - <<EOF
+const puppeteer = require('puppeteer');
+(async () => {
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'], executablePath: 'chromium-browser' });
+  const page = await browser.newPage();
+  await page.goto("${LINK}", {waitUntil: 'networkidle2'});
+  await page.screenshot({path: "${ARQUIVO}", fullPage: true});
+  await browser.close();
+})();
+EOF
 
-      - name: Instalar dependências Node.js (caso necessário)
-        run: npm install puppeteer
-
-      - name: Executar script de screenshot e envio ao Telegram
-        run: bash scripts/tirar_screenshot.sh
-        env:
-          API_KEY_TELEGRAM: ${{ secrets.API_KEY_TELEGRAM }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
+# Envia screenshot para o Telegram
+curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
+  -F chat_id="${CHAT_ID}" \
+  -F photo=@"${ARQUIVO}" \
+  -F caption="Screenshot do Power BI em ${DATA}"
