@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LINK="https://app.powerbi.com/..." # Coloque seu link aqui
+LINK="https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9"
 DATA=$(date +%Y%m%d_%H%M%S)
 ARQUIVO="screenshot_${DATA}.png"
 TOKEN="${API_KEY_TELEGRAM}"
