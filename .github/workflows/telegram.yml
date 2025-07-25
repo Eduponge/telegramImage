@@ -1,0 +1,25 @@
+name: Notificar no Telegram
+
+on:
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js e Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+
+      - name: Instalar dependências Node.js (caso necessário)
+        run: npm install puppeteer
+
+      - name: Executar script de screenshot e envio ao Telegram
+        run: bash scripts/tirar_screenshot.sh
+        env:
+          API_KEY_TELEGRAM: ${{ secrets.API_KEY_TELEGRAM }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
