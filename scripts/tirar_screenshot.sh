@@ -5,48 +5,63 @@ TOKEN="${API_KEY_TELEGRAM}"
 CHAT_ID="${CHAT_ID}"
 DATA=$(date +%Y%m%d_%H%M%S)
 ARQUIVO="screenshot_${DATA}.png"
+CHROMIUM_PATH="${CHROMIUM_PATH:-/usr/bin/chromium-browser}"
 
-echo "Iniciando captura de tela..."
+echo "[INFO] Iniciando captura de tela..."
 
 if [ -z "$TOKEN" ] || [ -z "$CHAT_ID" ]; then
-  echo "Erro: API_KEY_TELEGRAM (TOKEN) ou CHAT_ID não definidos como variáveis de ambiente."
+  echo "[ERRO] API_KEY_TELEGRAM (TOKEN) ou CHAT_ID não definidos como variáveis de ambiente."
   exit 1
 fi
 
-# Gera o screenshot com puppeteer
+if ! command -v node > /dev/null; then
+  echo "[ERRO] Node.js não encontrado. Instale antes de rodar o script."
+  exit 1
+fi
+
+if ! command -v curl > /dev/null; then
+  echo "[ERRO] curl não encontrado. Instale antes de rodar o script."
+  exit 1
+fi
+
+if ! [ -x "$CHROMIUM_PATH" ]; then
+  echo "[ERRO] Chromium não encontrado em $CHROMIUM_PATH."
+  exit 1
+fi
+
+# Gera o screenshot com Puppeteer
 node <<EOF
 const puppeteer = require('puppeteer');
 (async () => {
   try {
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'], executablePath: 'chromium-browser' });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'], executablePath: '${CHROMIUM_PATH}' });
     const page = await browser.newPage();
     await page.goto("${LINK}", {waitUntil: 'networkidle2'});
     await page.screenshot({path: "${ARQUIVO}", fullPage: true});
     await browser.close();
-    console.log("Screenshot gerado com sucesso.");
+    console.log("[INFO] Screenshot gerado com sucesso.");
   } catch (e) {
-    console.error("Erro ao gerar screenshot:", e);
+    console.error("[ERRO] ao gerar screenshot:", e);
     process.exit(1);
   }
 })();
 EOF
 
 if [ ! -f "${ARQUIVO}" ]; then
-  echo "Screenshot não criado. Abortando envio ao Telegram."
+  echo "[ERRO] Screenshot não criado. Abortando envio ao Telegram."
   exit 1
 fi
 
-echo "Enviando screenshot para o Telegram..."
+echo "[INFO] Enviando screenshot para o Telegram..."
 
-RESP=$(curl -s -w "%{http_code}" -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
   -F chat_id="${CHAT_ID}" \
   -F photo=@"${ARQUIVO}" \
   -F caption="Screenshot do Power BI em ${DATA}")
 
-HTTP_CODE="${RESP: -3}"
 if [ "$HTTP_CODE" != "200" ]; then
-  echo "Falha ao enviar imagem ao Telegram. Código HTTP: $HTTP_CODE"
+  echo "[ERRO] Falha ao enviar imagem ao Telegram. Código HTTP: $HTTP_CODE"
   exit 1
 else
-  echo "Imagem enviada com sucesso ao Telegram."
+  echo "[SUCESSO] Imagem enviada com sucesso ao Telegram."
 fi
