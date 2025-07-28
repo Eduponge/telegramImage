@@ -66,4 +66,3 @@ if [ "$HTTP_CODE" != "200" ]; then
 else
   echo "[SUCESSO] Imagem enviada com sucesso ao Telegram."
 fi
-
