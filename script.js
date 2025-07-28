@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
   await page.goto(url, { waitUntil: 'networkidle2' });
 
   // Aguarda um tempo extra para garantir que os gráficos carreguem
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(15000);
 
   // Tira o screenshot
   await page.screenshot({ path: 'powerbi_screenshot.png', fullPage: true });
