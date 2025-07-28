@@ -37,6 +37,7 @@ const puppeteer = require('puppeteer');
     const browser = await puppeteer.launch({ args: ['--no-sandbox'], executablePath: '${CHROMIUM_PATH}' });
     const page = await browser.newPage();
     await page.goto("${LINK}", {waitUntil: 'networkidle2'});
+    await page.waitForTimeout(20000); // Aguarda 20 segundos para garantir o carregamento completo
     await page.screenshot({path: "${ARQUIVO}", fullPage: true});
     await browser.close();
     console.log("[INFO] Screenshot gerado com sucesso.");
@@ -65,3 +66,4 @@ if [ "$HTTP_CODE" != "200" ]; then
 else
   echo "[SUCESSO] Imagem enviada com sucesso ao Telegram."
 fi
+
