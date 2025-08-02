@@ -2,7 +2,9 @@ name: Screenshot Power BI and Send to Telegram
 
 on:
   schedule:
-    - cron: '0 * * * *' # roda a cada hora
+    - cron: '50 13 * * *'  # 10:50 BRT
+    - cron: '50 21 * * *'  # 18:50 BRT
+    - cron: '50 5 * * *'   # 02:50 BRT
   workflow_dispatch:
 
 jobs:
