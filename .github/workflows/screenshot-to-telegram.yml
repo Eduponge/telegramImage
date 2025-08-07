@@ -78,5 +78,4 @@ jobs:
       - name: Dar permissão ao script
         run: chmod +x scripts/tirar_screenshot.sh
       - name: Executar captura e envio para Telegram
-        run: bash scripts/tirar*
-
+        run: bash scripts/tirar_screenshot.sh
