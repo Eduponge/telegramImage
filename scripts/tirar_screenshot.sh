@@ -14,8 +14,6 @@ if [ -z "$TOKEN" ] || [ -z "${CHAT_IDS[0]}" ] || [ -z "${CHAT_IDS[1]}" ]; then
   exit 1
 fi
 
-# ... (restante da verificação igual)
-
 # Gera o screenshot com Puppeteer
 node <<EOF
 const puppeteer = require('puppeteer');
