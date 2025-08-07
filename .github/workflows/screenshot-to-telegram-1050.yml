@@ -12,6 +12,7 @@ jobs:
       API_KEY_TELEGRAM: ${{ secrets.API_KEY_TELEGRAM }}
       CHAT_ID: ${{ secrets.CHAT_ID }}
       CHAT_ID_EDU: ${{ secrets.CHAT_ID_EDU }}
+      CHAT_ID_WELL: ${{ secrets.CHAT_ID_WELL }}
       CHROMIUM_PATH: /usr/bin/chromium
       LINK: https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9&pageName=34385227a03acc0a5e40
 
