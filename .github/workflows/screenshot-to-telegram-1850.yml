@@ -1,0 +1,30 @@
+name: Screenshot Power BI and Send to Telegram - 18:50 BRT
+
+on:
+  schedule:
+    - cron: '50 21 * * *'  # 18:50 BRT
+  workflow_dispatch:
+
+jobs:
+  send_1850:
+    runs-on: ubuntu-latest
+    env:
+      API_KEY_TELEGRAM: ${{ secrets.API_KEY_TELEGRAM }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
+      CHAT_ID_EDU: ${{ secrets.CHAT_ID_EDU }}
+      CHROMIUM_PATH: /usr/bin/chromium
+      LINK: https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9&pageName=7f65ebceb5411ad885b4
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+      - name: Instalar Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium
+      - name: Instalar dependências Node.js
+        run: npm ci
+      - name: Dar permissão ao script
+        run: chmod +x scripts/tirar_screenshot.sh
+      - name: Executar captura e envio para Telegram
+        run: bash scripts/tirar_screenshot.sh
