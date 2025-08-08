@@ -33,6 +33,9 @@ const puppeteer = require('puppeteer');
 })();
 EOF
 
+# NOVO: Faz o crop da imagem para 600x374 pixels a partir do canto superior esquerdo
+convert "${ARQUIVO}" -crop 600x374+0+0 "${ARQUIVO}"
+
 if [ ! -f "${ARQUIVO}" ]; then
   echo "[ERRO] Screenshot não criado. Abortando envio ao Telegram."
   exit 1
