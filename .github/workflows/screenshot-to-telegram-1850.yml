@@ -25,8 +25,8 @@ jobs:
           sudo apt-get install -y chromium
       - name: Instalar dependências Node.js
         run: npm ci
-      - name: Instalar sharp
-        run: npm install sharp
+      - name: Instalar ImageMagick
+        run: sudo apt-get install -y imagemagick
       - name: Dar permissão ao script
         run: chmod +x scripts/tirar_screenshot.sh
       - name: Executar captura e envio para Telegram
