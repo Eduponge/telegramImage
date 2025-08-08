@@ -14,7 +14,7 @@ jobs:
       CHAT_ID_EDU: ${{ secrets.CHAT_ID_EDU }}      
       CHAT_ID_WELL: ${{ secrets.CHAT_ID_WELL }}
       CHROMIUM_PATH: /usr/bin/chromium
-      LINK: https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9&pageName=7f65ebceb5411ad885b4
+      LINK: https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9&pageName=5178602c63008514a009
 
     steps:
       - name: Checkout código
