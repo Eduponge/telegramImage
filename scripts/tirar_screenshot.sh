@@ -9,8 +9,8 @@ CHROMIUM_PATH="${CHROMIUM_PATH:-/usr/bin/chromium-browser}"
 
 echo "[INFO] Iniciando captura de tela..."
 
-if [ -z "$TOKEN" ] || [ -z "${CHAT_IDS[0]}" ] || [ -z "${CHAT_IDS[1]}" ]; then
-  echo "[ERRO] API_KEY_TELEGRAM (TOKEN) ou CHAT_IDs não definidos como variáveis de ambiente."
+if [ -z "$TOKEN" ] || ([ -z "${CHAT_IDS[0]}" ] && [ -z "${CHAT_IDS[1]}" ] && [ -z "${CHAT_IDS[2]}" ]); then
+  echo "[ERRO] API_KEY_TELEGRAM (TOKEN) ou nenhum CHAT_ID definido como variável de ambiente."
   exit 1
 fi
 
