@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const sharp = require('sharp');
 
 (async () => {
   // Recebe o link via variável de ambiente LINK, ou usa um padrão se não definido
@@ -15,16 +14,8 @@ const sharp = require('sharp');
   // Aguarda um tempo extra para garantir que os gráficos carreguem (20 segundos)
   await page.waitForTimeout(20000);
 
-  // Salva o screenshot com nome fixo
-  const screenshotPath = 'powerbi_screenshot.png';
-  await page.screenshot({ path: screenshotPath, fullPage: true });
+  // Salva o screenshot com nome fixo (pode ser alterado para dinâmico se quiser)
+  await page.screenshot({ path: 'powerbi_screenshot.png', fullPage: true });
 
   await browser.close();
-
-  // Crop para 600x374 a partir do canto superior esquerdo
-  await sharp(screenshotPath)
-    .extract({ width: 600, height: 374, left: 0, top: 0 })
-    .toFile(screenshotPath);
-
-  console.log('Screenshot capturado e CORTADO com sucesso!');
 })();
