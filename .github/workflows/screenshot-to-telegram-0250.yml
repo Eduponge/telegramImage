@@ -2,7 +2,7 @@ name: Screenshot Power BI and Send to Telegram - 02:50 BRT
 
 on:
   schedule:
-    - cron: '40 5 * * *'   # 02:50 BRT
+    - cron: '40 5 * * *'   # 02:40 BRT
   workflow_dispatch:
 
 jobs:
