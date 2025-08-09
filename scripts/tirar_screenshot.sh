@@ -17,19 +17,28 @@ fi
 # Gera o screenshot com Puppeteer
 node <<EOF
 const puppeteer = require('puppeteer');
+
 (async () => {
-  try {
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'], executablePath: '${CHROMIUM_PATH}' });
-    const page = await browser.newPage();
-    await page.goto("${LINK}", {waitUntil: 'networkidle2'});
-    await page.waitForTimeout(20000);
-    await page.screenshot({path: "${ARQUIVO}", fullPage: true});
-    await browser.close();
-    console.log("[INFO] Screenshot gerado com sucesso.");
-  } catch (e) {
-    console.error("[ERRO] ao gerar screenshot:", e);
-    process.exit(1);
-  }
+  // Recebe o link via variável de ambiente LINK, ou usa um padrão se não definido
+  const url =
+    process.env.LINK ||
+    'https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9';
+
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+
+  // Define viewport com resolução e densidade maiores
+  await page.setViewport({ width: 800, height: 600, deviceScaleFactor: 2 });
+
+  await page.goto(url, { waitUntil: 'networkidle2' });
+
+  // Aguarda um tempo extra para garantir que os gráficos carreguem (20 segundos)
+  await page.waitForTimeout(20000);
+
+  // Salva o screenshot em JPEG, qualidade máxima
+  await page.screenshot({ path: 'screenshot.jpg', type: 'jpeg', quality: 100 });
+
+  await browser.close();
 })();
 EOF
 
