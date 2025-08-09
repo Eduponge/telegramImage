@@ -4,7 +4,7 @@ LINK="${LINK}"
 TOKEN="${API_KEY_TELEGRAM}"
 CHAT_IDS=("${CHAT_ID}" "${CHAT_ID_EDU}" "${CHAT_ID_WELL}")
 DATA=$(date +%Y%m%d_%H%M%S)
-ARQUIVO="screenshot_${DATA}.png"
+ARQUIVO="screenshot_${DATA}.jpg"
 CHROMIUM_PATH="${CHROMIUM_PATH:-/usr/bin/chromium-browser}"
 
 echo "[INFO] Iniciando captura de tela..."
@@ -19,15 +19,16 @@ node <<EOF
 const puppeteer = require('puppeteer');
 
 (async () => {
-  // Recebe o link via variável de ambiente LINK, ou usa um padrão se não definido
   const url =
     process.env.LINK ||
     'https://app.powerbi.com/view?r=eyJrIjoiY2Q3NDU0ZTYtNzBjNS00NzE5LTkzMzEtMGU3ODRhZDc4YjY5IiwidCI6ImQ4NDI2OWQ4LWMxNWUtNGRmMS1iOWRmLTBlNjAzMWMzZjc0YyJ9';
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
 
-  // Define viewport com resolução e densidade maiores
   await page.setViewport({ width: 800, height: 600, deviceScaleFactor: 2 });
 
   await page.goto(url, { waitUntil: 'networkidle2' });
@@ -35,31 +36,33 @@ const puppeteer = require('puppeteer');
   // Aguarda um tempo extra para garantir que os gráficos carreguem (20 segundos)
   await page.waitForTimeout(20000);
 
-  // Salva o screenshot em JPEG, qualidade máxima
-  await page.screenshot({ path: 'screenshot.jpg', type: 'jpeg', quality: 100 });
+  // Salva o screenshot em JPEG, qualidade máxima, com nome dinâmico
+  await page.screenshot({ path: '${ARQUIVO}', type: 'jpeg', quality: 100 });
 
   await browser.close();
 })();
 EOF
 
-# NOVO: Faz o crop da imagem para 600x374 pixels a partir do canto superior esquerdo
-convert "${ARQUIVO}" -crop 410x540+190+0 -quality 100 -sharpen 0x1 "${ARQUIVO}"
-
-if [ ! -f "${ARQUIVO}" ]; then
+# Faz o crop da imagem para 410x540 pixels a partir do ponto (190,0), qualidade máxima e nitidez extra
+if [ -f "${ARQUIVO}" ]; then
+  convert "${ARQUIVO}" -crop 410x540+190+0 -quality 100 -sharpen 0x1 "${ARQUIVO}"
+else
   echo "[ERRO] Screenshot não criado. Abortando envio ao Telegram."
   exit 1
 fi
 
 for ID in "${CHAT_IDS[@]}"; do
-  echo "[INFO] Enviando screenshot para o Telegram chat_id: $ID..."
-  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
-    -F chat_id="$ID" \
-    -F photo=@"${ARQUIVO}" \
-    -F caption="Screenshot do Power BI em ${DATA}")
+  if [ -n "$ID" ]; then
+    echo "[INFO] Enviando screenshot para o Telegram chat_id: $ID..."
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
+      -F chat_id="$ID" \
+      -F photo=@"${ARQUIVO}" \
+      -F caption="Screenshot do Power BI em ${DATA}")
 
-  if [ "$HTTP_CODE" != "200" ]; then
-    echo "[ERRO] Falha ao enviar imagem ao Telegram. Código HTTP: $HTTP_CODE"
-  else
-    echo "[SUCESSO] Imagem enviada com sucesso ao Telegram para chat_id $ID."
+    if [ "$HTTP_CODE" != "200" ]; then
+      echo "[ERRO] Falha ao enviar imagem ao Telegram. Código HTTP: $HTTP_CODE"
+    else
+      echo "[SUCESSO] Imagem enviada com sucesso ao Telegram para chat_id $ID."
+    fi
   fi
 done
