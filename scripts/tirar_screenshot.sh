@@ -33,8 +33,14 @@ const puppeteer = require('puppeteer');
 
   await page.goto(url, { waitUntil: 'networkidle2' });
 
-  // Aguarda um tempo extra para garantir que os gráficos carreguem (20 segundos)
-  await page.waitForTimeout(20000);
+  // Tenta aguardar por um seletor típico do Power BI, ajuste se necessário!
+  try {
+    await page.waitForSelector('.visual-container', { timeout: 60000 });
+    await page.waitForTimeout(3000);
+  } catch (e) {
+    console.log('Aviso: seletor .visual-container não encontrado. Tentando screenshot mesmo assim.');
+    await page.waitForTimeout(20000);
+  }
 
   // Salva o screenshot em JPEG, qualidade máxima, com nome dinâmico
   await page.screenshot({ path: '${ARQUIVO}', type: 'jpeg', quality: 100 });
@@ -51,18 +57,18 @@ else
   exit 1
 fi
 
-for ID in "${CHAT_IDS[@]}"; do
-  if [ -n "$ID" ]; then
-    echo "[INFO] Enviando screenshot para o Telegram chat_id: $ID..."
-    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.telegram.org/bot${TOKEN}/sendPhoto" \
-      -F chat_id="$ID" \
-      -F photo=@"${ARQUIVO}" \
-      -F caption="Screenshot do Power BI em ${DATA}")
+for ID in "\${CHAT_IDS[@]}"; do
+  if [ -n "\$ID" ]; then
+    echo "[INFO] Enviando screenshot para o Telegram chat_id: \$ID..."
+    HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://api.telegram.org/bot\${TOKEN}/sendPhoto" \
+      -F chat_id="\$ID" \
+      -F photo=@"\${ARQUIVO}" \
+      -F caption="Screenshot do Power BI em \${DATA}")
 
-    if [ "$HTTP_CODE" != "200" ]; then
-      echo "[ERRO] Falha ao enviar imagem ao Telegram. Código HTTP: $HTTP_CODE"
+    if [ "\$HTTP_CODE" != "200" ]; then
+      echo "[ERRO] Falha ao enviar imagem ao Telegram. Código HTTP: \$HTTP_CODE"
     else
-      echo "[SUCESSO] Imagem enviada com sucesso ao Telegram para chat_id $ID."
+      echo "[SUCESSO] Imagem enviada com sucesso ao Telegram para chat_id \$ID."
     fi
   fi
 done
