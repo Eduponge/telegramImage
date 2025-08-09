@@ -51,7 +51,7 @@ EOF
 
 # Faz o crop da imagem para 410x540 pixels a partir do ponto (190,0), qualidade máxima e nitidez extra
 if [ -f "${ARQUIVO}" ]; then
-  convert "${ARQUIVO}" -crop 410x540+190+0 -quality 100 -sharpen 0x1 "${ARQUIVO}"
+  convert "${ARQUIVO}" -crop 1024x1060+340+0 -quality 100 -sharpen 0x1 "${ARQUIVO}"
 else
   echo "[ERRO] Screenshot não criado. Abortando envio ao Telegram."
   exit 1
