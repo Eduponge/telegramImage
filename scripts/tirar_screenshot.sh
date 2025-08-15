@@ -2,7 +2,7 @@
 
 LINK="${LINK}"
 TOKEN="${API_KEY_TELEGRAM}"
-CHAT_IDS=("${CHAT_ID}" "${CHAT_ID_EDU}" "${CHAT_ID_WELL}")
+CHAT_IDS=("${CHAT_ID}" "${CHAT_ID_EDU}" "${CHAT_ID_WELL}" "${CHAT_GROUP_ID}")
 DATA=$(date +%Y%m%d_%H%M%S)
 ARQUIVO="screenshot_${DATA}.jpg"
 CHROMIUM_PATH="${CHROMIUM_PATH:-/usr/bin/chromium-browser}"
