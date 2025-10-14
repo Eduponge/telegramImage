@@ -3,9 +3,27 @@
   "version": "1.0.0",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"No tests specified\""
+    "test": "echo \"No tests specified\"",
+    "screenshot": "bash scripts/tirar_screenshot.sh",
+    "screenshot-ambos": "bash scripts/enviar_ambos.sh"
   },
   "dependencies": {
     "puppeteer": "^21.3.8"
-  }
+  },
+  "optionalDependencies": {
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {},
+  "description": "Automatiza captura de screenshots de dashboards do Power BI e envia para Telegram e/ou WhatsApp",
+  "keywords": [
+    "telegram",
+    "whatsapp",
+    "screenshot",
+    "powerbi",
+    "automation",
+    "bot"
+  ],
+  "author": "",
+  "license": "MIT"
 }

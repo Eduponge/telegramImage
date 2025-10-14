@@ -1,0 +1,37 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Screenshots gerados
+screenshot_*.jpg
+screenshot_*.png
+powerbi_screenshot.png
+
+# Sessões do WhatsApp (não commitar!)
+.wwebjs_auth/
+.wwebjs_cache/
+auth_info_baileys/
+
+# Variáveis de ambiente
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporários
+tmp/
+temp/
+*.tmp
