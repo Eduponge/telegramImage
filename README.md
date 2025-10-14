@@ -1,8 +1,23 @@
 # telegramImage
 
+## 📚 Índice de Documentação
+
+**Comece aqui se está em dúvida:**
+- 📊 **[COMPARACAO.md](COMPARACAO.md)** - Tabela comparativa rápida Telegram vs WhatsApp
+- 📝 **[RESPOSTA_WHATSAPP.md](RESPOSTA_WHATSAPP.md)** - Resposta à pergunta sobre WhatsApp
+- ⚡ **[QUICK_START.md](QUICK_START.md)** - Guia de início rápido
+
+**Documentação detalhada:**
+- ❓ **[FAQ.md](FAQ.md)** - Perguntas frequentes (em português)
+- 💬 **[WHATSAPP_INTEGRATION.md](WHATSAPP_INTEGRATION.md)** - Guia técnico completo de WhatsApp
+
+---
+
 ## Descrição
 
 Este repositório automatiza a captura de screenshots de dashboards do Power BI e o envio para o Telegram usando a API de Bots do Telegram.
+
+**💡 Novo:** Agora com suporte opcional para WhatsApp! Veja a [documentação](WHATSAPP_INTEGRATION.md) para mais detalhes.
 
 ## Como Funciona
 
